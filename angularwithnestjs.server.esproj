@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.1738743">
+  <ItemGroup>
+    <None Remove="src\modules\transactions\controllers\**" />
+    <TypeScriptConfiguration Remove="src\modules\transactions\controllers\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\core\" />
+  </ItemGroup>
+</Project>

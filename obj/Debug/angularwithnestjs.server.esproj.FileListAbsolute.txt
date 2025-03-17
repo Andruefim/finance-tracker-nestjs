@@ -1,0 +1,1 @@
+C:\Users\Andrey\Desktop\Nestjs\AngularWithNestjs\angularwithnestjs.server\obj\Debug\angularwithnestjs.server.esproj.CoreCompileInputs.cache
