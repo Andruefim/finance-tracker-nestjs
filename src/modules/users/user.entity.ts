@@ -21,6 +21,9 @@ export class User {
     @Column({ default: null })
     emailConfirmationCode: string;
 
+    @Column({ default: false })
+    emailConfirmed: boolean;
+
     @OneToMany(() => Transaction, transaction => transaction.user)
     transactions: Transaction[]
 }

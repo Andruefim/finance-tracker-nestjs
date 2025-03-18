@@ -17,7 +17,8 @@ export class AuthService {
 
     async signIn(email: string, pass: string): Promise<any> {
         const user = await this.usersRepository.findOneBy({ email });
-        const isMatch = await bcrypt.compare(pass, user!.password);
+
+        const isMatch = await bcrypt.compare(pass, user?.password || '');
 
         if (!user || !isMatch) throw new UnauthorizedException();
 
@@ -27,8 +28,13 @@ export class AuthService {
             email: user.email
         }
 
+        const token = await this.jwtService.signAsync(payload);
+
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            token,
+            userId: user!.userId,
+            username: user!.userName,
+            email: user!.email
         }
     }
 
@@ -37,10 +43,16 @@ export class AuthService {
 
         let data = {
             ...payload,
-            password: hashPass
+            password: hashPass,
+            userName: payload.username
         }
 
-        const user = await this.usersRepository.create(data);
-        return user;
+        const user = this.usersRepository.create(data);
+
+        await this.usersRepository.save(user);
+
+        return {
+            message: "User registered successfully"
+        }
     }
 }

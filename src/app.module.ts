@@ -12,7 +12,9 @@ import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({
+            isGlobal: true
+        }),
         TypeOrmModule.forRoot({
             type: 'mysql',
             host: process.env.DATABASE_HOST,
