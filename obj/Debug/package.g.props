@@ -26,6 +26,7 @@
     <PackageJsonDependenciesNestjsPlatformExpress Condition="$(PackageJsonDependenciesNestjsPlatformExpress) == ''">^11.0.1</PackageJsonDependenciesNestjsPlatformExpress>
     <PackageJsonDependenciesNestjsSwagger Condition="$(PackageJsonDependenciesNestjsSwagger) == ''">^11.0.6</PackageJsonDependenciesNestjsSwagger>
     <PackageJsonDependenciesNestjsTypeorm Condition="$(PackageJsonDependenciesNestjsTypeorm) == ''">^11.0.0</PackageJsonDependenciesNestjsTypeorm>
+    <PackageJsonDependenciesSendgridMail Condition="$(PackageJsonDependenciesSendgridMail) == ''">^8.1.4</PackageJsonDependenciesSendgridMail>
     <PackageJsonDependenciesTypesBcrypt Condition="$(PackageJsonDependenciesTypesBcrypt) == ''">^5.0.2</PackageJsonDependenciesTypesBcrypt>
     <PackageJsonDependenciesBcrypt Condition="$(PackageJsonDependenciesBcrypt) == ''">^5.1.1</PackageJsonDependenciesBcrypt>
     <PackageJsonDependenciesClassTransformer Condition="$(PackageJsonDependenciesClassTransformer) == ''">^0.5.1</PackageJsonDependenciesClassTransformer>
