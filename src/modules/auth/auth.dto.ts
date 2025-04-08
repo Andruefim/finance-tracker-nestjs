@@ -18,3 +18,8 @@ export class SignInDto {
     @IsNotEmpty()
     password: string;
 }
+
+export class ConfirmEmailDto {
+    @IsNotEmpty()
+    code: string;
+}

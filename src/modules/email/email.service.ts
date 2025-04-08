@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SendgridClient } from './sendgrid-client';
 import { MailDataRequired } from '@sendgrid/mail';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +10,9 @@ interface IEmailService {
     sendEmailConfirmation(email: string): Promise<{
         confirmationSent: boolean;
         userCode: string;
+    }>
+    confirmEmail(email: string, code: string): Promise<{
+        emailConfirmed: boolean
     }>
     sendEmail(subject: string, message: string, toEmail: string): void;
 }
@@ -24,14 +27,13 @@ export class EmailService implements IEmailService {
 
     async sendEmailConfirmation(email: string) {
         const user = await this.usersRepository.findOneBy({ email });
-
         if (!user) throw new UnauthorizedException();
 
         const code = randomInt(10000, 999999).toString();
 
         const updatedUser = this.usersRepository.update(user.userId, { ...user, emailConfirmationCode: code });
 
-        if (!updatedUser) throw new UnauthorizedException("Failed to save confirmation code");
+        if (!updatedUser) throw new BadRequestException("Failed to save confirmation code");
 
         await this.sendEmail(
             "Finance Tracker email confirmaiton",
@@ -44,6 +46,20 @@ export class EmailService implements IEmailService {
             userCode: code
         }
     } 
+
+    async confirmEmail(email: string, code: string) {
+        const user = await this.usersRepository.findOneBy({ email });
+        if (!user) throw new UnauthorizedException();
+
+        if (code !== user.emailConfirmationCode) throw new BadRequestException("Invalid confirmation code.");
+
+        const updatedUser = this.usersRepository.update(user.userId, { ...user, emailConfirmed: true });
+        if (!updatedUser) throw new BadRequestException("Failed to apply email confirmation.");
+
+        return {
+            emailConfirmed: true
+        }
+    }
 
     async sendEmail(subject: string, message: string, toEmail: string) {
         const email: MailDataRequired = {
