@@ -9,9 +9,8 @@ import { User } from './modules/users/user.entity';
 import { UsersModule } from './modules/users/users.module';
 import { Transaction } from './modules/transactions/transaction.entity';
 import { AuthModule } from './modules/auth/auth.module';
-import { EmailModule } from './email/email.module';
 import { JwtModule } from '@nestjs/jwt';
-//import { EmailModule } from './modules/email/email.module';
+import { EmailModule } from './modules/email/email.module';
 
 @Module({
     imports: [

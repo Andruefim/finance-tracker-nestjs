@@ -17,7 +17,7 @@ export class UsersController {
 
     @Get('user')
     async findOne(@Req() req: Request): Promise<User | null> {
-        return await this.usersService.findOne(req.body.user?.userId);
+        return await this.usersService.findOne((req as  any).user?.userId);
     }
 
     @Delete('user/:id')
