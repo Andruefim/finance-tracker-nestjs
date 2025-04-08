@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 @Module({
     imports: [
         forwardRef(() => UsersModule),
+        ConfigModule.forRoot({ isGlobal: true }),
         JwtModule.register({
             global: true,
             secret: process.env.JWT_SECRET,

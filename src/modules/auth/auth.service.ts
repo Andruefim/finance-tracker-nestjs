@@ -18,9 +18,11 @@ export class AuthService {
     async signIn(email: string, pass: string): Promise<any> {
         const user = await this.usersRepository.findOneBy({ email });
 
-        const isMatch = await bcrypt.compare(pass, user?.password || '');
+        if (!user) throw new UnauthorizedException();
 
-        if (!user || !isMatch) throw new UnauthorizedException();
+        const isMatch = await bcrypt.compare(pass, user.password);
+
+        if (!isMatch) throw new UnauthorizedException();
 
         const payload = {
             sub: user!.userId,
