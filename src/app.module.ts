@@ -11,6 +11,7 @@ import { Transaction } from './modules/transactions/transaction.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from './modules/email/email.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
     imports: [
@@ -32,7 +33,8 @@ import { EmailModule } from './modules/email/email.module';
         TransactionsModule,
         UsersModule,
         AuthModule,
-        EmailModule
+        EmailModule,
+        CategoriesModule
     ],
     controllers: [AppController],
     providers: [AppService],

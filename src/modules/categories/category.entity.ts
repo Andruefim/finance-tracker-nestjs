@@ -2,23 +2,20 @@ import { PrimaryGeneratedColumn, Column, Entity, ManyToOne } from "typeorm";
 import { User } from "../users/user.entity";
 
 @Entity()
-export class Transaction {
+export class Category {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
     @Column()
-    date: string;
-
-    @Column()
-    category: string;
-
-    @Column("decimal")
-    amount: number;
+    name: string;
 
     @Column({ nullable: true })
     description?: string;
 
-    @ManyToOne(() => User, user => user.transactions, { nullable: false })
+    @Column()
+    type: string;
+
+    @ManyToOne(() => User, user => user.categories, { nullable: false })
     user: User;
 
     @Column()
