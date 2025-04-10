@@ -1,12 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateCategoryDto } from './categories.dto';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { CreateCategoryDto, UpdateCategoryDto } from './categories.dto';
 import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
 
 interface ICategoriesService {
-    createCategory(createCategoryDto: CreateCategoryDto, email: string): Promise<Category>
+    create(createCategoryDto: CreateCategoryDto, userId: User['userId']): Promise<Category>;
+
+    findAll(userId: User['userId']): Promise<Category[]>;
+
+    update(id: Category['id'], userId: User['userId'], updateCategoryDto: UpdateCategoryDto): Promise<Category>;
+
+    remove(id: Category['id'], userId: User['userId']): Promise<Category>;
 }
 
 @Injectable()
@@ -17,14 +23,37 @@ export class CategoriesService implements ICategoriesService {
         private usersRepository: Repository<User>
     ) { }
 
-    async createCategory(createCategoryDto: CreateCategoryDto, email: string) {
-        const user = this.usersRepository.findOneBy({ email });
+    async create(createCategoryDto: CreateCategoryDto, userId: User['userId']) {
+        const user = await this.usersRepository.findOneBy({ userId });
         if (!user) throw new UnauthorizedException();
 
-        const category = this.categoriesRepository.create(createCategoryDto);
+        const category = this.categoriesRepository.create({ ...createCategoryDto, user, userId });
 
-        await this.categoriesRepository.save(category);
+        return this.categoriesRepository.save(category);
+    }
 
-        return category;
+    async findAll(userId: User['userId']) {
+        return this.categoriesRepository.findBy({ userId });
+    }
+
+    async update(
+        id: Category['id'],
+        userId: User['userId'],
+        updateCategoryDto: UpdateCategoryDto
+    ) {
+        const category = await this.categoriesRepository.findOneBy({ id, userId });
+        if (!category) throw new NotFoundException();
+    
+        return this.categoriesRepository.save({...category, ...updateCategoryDto});
+    }
+
+    async remove(
+        id: Category['id'],
+        userId: User['userId'],
+    ) {
+        const category = await this.categoriesRepository.findOneBy({ id, userId });
+        if (!category) throw new NotFoundException();
+
+        return this.categoriesRepository.remove(category);
     }
 }
