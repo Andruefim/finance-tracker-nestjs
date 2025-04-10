@@ -41,8 +41,9 @@ export class CategoriesService implements ICategoriesService {
         userId: User['userId'],
         updateCategoryDto: UpdateCategoryDto
     ) {
-        const category = await this.categoriesRepository.findOneBy({ id, userId });
+        const category = await this.categoriesRepository.findOneBy({ id });
         if (!category) throw new NotFoundException();
+        if (category.userId !== userId) throw new UnauthorizedException();
     
         return this.categoriesRepository.save({...category, ...updateCategoryDto});
     }
@@ -51,8 +52,9 @@ export class CategoriesService implements ICategoriesService {
         id: Category['id'],
         userId: User['userId'],
     ) {
-        const category = await this.categoriesRepository.findOneBy({ id, userId });
+        const category = await this.categoriesRepository.findOneBy({ id });
         if (!category) throw new NotFoundException();
+        if (category.userId !== userId) throw new UnauthorizedException();
 
         return this.categoriesRepository.remove(category);
     }
