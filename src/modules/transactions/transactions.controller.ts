@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, UseGuards, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Req, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CreateTransactionDto, UpdateTransactionDto } from './dto/transaction.dto';
 import { Observable, of } from 'rxjs';
 import { TransactionsService } from './transactions.service';
@@ -13,28 +13,24 @@ export class TransactionsController {
 
     @Post()
     async create(
+        @Req() req: Request,
         @Body(new ValidationPipe()) createTransactionDto: CreateTransactionDto
     ) {
-        await this.transactionsService.create(createTransactionDto);
+        return await this.transactionsService.create(createTransactionDto, (req as any)?.user.userId);
     }
 
     @Get()
-    async findAll(): Promise<Transaction[]> {
-        return await this.transactionsService.findAll();
+    async findAll(@Req() req: Request): Promise<Transaction[]> {
+        return await this.transactionsService.findAll((req as any)?.user.userId);
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string): Promise<Transaction> {
-        const transaction = await this.transactionsService.findOne(id);
-
-        if (!transaction)
-            throw new BadRequestException(`Transaction with id: ${id} doesn't exist.`);
-
-        return transaction;
+    async findOne(@Param('id') id: string) {
+        return await this.transactionsService.findOne(id);
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
-        await this.transactionsService.delete(id); 
+    async remove(@Param('id') id: string, @Req() req: Request) {
+        return await this.transactionsService.remove(id, (req as any)?.user.userId); 
     }
 }
