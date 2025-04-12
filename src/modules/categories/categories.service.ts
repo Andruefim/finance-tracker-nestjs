@@ -4,11 +4,13 @@ import { Category } from './category.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
+import { CategoriesData } from './categories.interface';
+
 
 interface ICategoriesService {
     create(createCategoryDto: CreateCategoryDto, userId: User['userId']): Promise<Category>;
 
-    findAll(userId: User['userId']): Promise<Category[]>;
+    findAll(userId: User['userId']): Promise<CategoriesData[]>;
 
     update(id: Category['id'], userId: User['userId'], updateCategoryDto: UpdateCategoryDto): Promise<Category>;
 
@@ -33,7 +35,19 @@ export class CategoriesService implements ICategoriesService {
     }
 
     async findAll(userId: User['userId']) {
-        return this.categoriesRepository.findBy({ userId });
+        const [income, expense] = await Promise.all([
+            this.categoriesRepository.find({
+                where: { userId, type: 'Income' }
+            }),
+            this.categoriesRepository.find({
+                where: { userId, type: 'Expense' }
+            })
+        ]);
+
+        return [
+            { type: 'Income', data: income },
+            { type: 'Expense', data: expense }
+        ];
     }
 
     async update(

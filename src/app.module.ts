@@ -12,6 +12,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmailModule } from './modules/email/email.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { TransactionsChartsModule } from './modules/transactions-charts/transactions-charts.module';
+import { Category } from './modules/categories/category.entity';
 
 @Module({
     imports: [
@@ -25,7 +27,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
             username: process.env.DATABASE_USER,
             password: process.env.DATABASE_PASSWORD,
             database: process.env.DATABASE_NAME,
-            entities: [User, Transaction],
+            entities: [User, Transaction, Category],
             synchronize: true,
             autoLoadEntities: true,
             logging: true,
@@ -34,7 +36,8 @@ import { CategoriesModule } from './modules/categories/categories.module';
         UsersModule,
         AuthModule,
         EmailModule,
-        CategoriesModule
+        CategoriesModule,
+        TransactionsChartsModule
     ],
     controllers: [AppController],
     providers: [AppService],

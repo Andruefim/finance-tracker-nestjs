@@ -10,8 +10,11 @@ export class TransactionsService {
     constructor(
         @InjectRepository(Transaction)
         private transactionsRepository: Repository<Transaction>,
+
+        @InjectRepository(User)
+        private usersRepository: Repository<User>,
+
         private dataSource: DataSource,
-        private usersRepository: Repository<User>
     ) { }
 
     async create(createTransactionDto: CreateTransactionDto, userId: User['userId']) {
