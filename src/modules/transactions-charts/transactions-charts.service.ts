@@ -50,7 +50,7 @@ export class TransactionsChartsService {
             .createQueryBuilder("transaction")
             .where("transaction.userId = :userId AND transaction.Amount < 0", { userId })
             .select("transaction.category")
-            .addSelect("SUM(transaction.amount)")
+            .addSelect("SUM(ABS(transaction.amount))")
             .groupBy("transaction.category")
             .getRawMany();
     }

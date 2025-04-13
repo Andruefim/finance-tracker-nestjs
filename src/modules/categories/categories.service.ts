@@ -22,12 +22,19 @@ export class CategoriesService implements ICategoriesService {
     constructor(
         @InjectRepository(Category)
         private categoriesRepository: Repository<Category>,
+
+        @InjectRepository(User)
         private usersRepository: Repository<User>
     ) { }
 
     async create(createCategoryDto: CreateCategoryDto, userId: User['userId']) {
+        console.log('userId', userId);
+        console.log('createCategoryDto', createCategoryDto);
         const user = await this.usersRepository.findOneBy({ userId });
         if (!user) throw new UnauthorizedException();
+
+        console.log('user', user);
+
 
         const category = this.categoriesRepository.create({ ...createCategoryDto, user, userId });
 

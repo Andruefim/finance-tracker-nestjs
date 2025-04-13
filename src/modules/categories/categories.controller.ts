@@ -14,11 +14,11 @@ export class CategoriesController {
         @Req() req: Request,
         @Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto
     ): Promise<Category> {
-        return await this.categoriesService.create(createCategoryDto, (req as any)?.user.userId)
+        return await this.categoriesService.create(createCategoryDto, (req as any)?.body?.user.userId)
     }
 
     @Get()
-    async findAll(@Req() req: Request): Promise<Category[]> {
+    async findAll(@Req() req: Request) {
         return await this.categoriesService.findAll((req as any)?.user.userId);
     }
 
