@@ -23,6 +23,8 @@ export class AuthGuard implements CanActivate {
                 }
             );
 
+            console.log('guardUser', payload)
+
 
             request['user'] = payload;
         } catch {

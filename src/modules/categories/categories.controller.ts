@@ -14,7 +14,8 @@ export class CategoriesController {
         @Req() req: Request,
         @Body(new ValidationPipe()) createCategoryDto: CreateCategoryDto
     ): Promise<Category> {
-        return await this.categoriesService.create(createCategoryDto, (req as any)?.body?.user.userId)
+        console.log('categoryCreateReq', (req as any)?.user)
+        return await this.categoriesService.create(createCategoryDto, (req as any)?.user.userId)
     }
 
     @Get()
